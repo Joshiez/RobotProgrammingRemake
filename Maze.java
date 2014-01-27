@@ -38,7 +38,7 @@ public class Maze {
 		
 		pilot.travel(10000000, true);
 
-		while (pilot.isMoving()) {
+		while (pilot.isMoving()) {  // Main loop
 			if (bump.isPressed()) {
 				pilot.stop();
 				pilot.travel(-3);
@@ -47,9 +47,9 @@ public class Maze {
 				scanArea();
 				getLargestScan();
 				detectNewDirection();
-				backTrack = detectBackTrack();
-				if(backTrack){
-					pilot.rotate(-90);
+				backTrack = detectBackTrack(); // The anti backtrack method that prevents turning a
+				if(backTrack){                 // new scan from returning a value that would cause the
+					pilot.rotate(-90);     // robot to backtrack
 					selfRightValue = 90;
 				}
 				else{
@@ -57,7 +57,7 @@ public class Maze {
 				}
 				scanReset();
 				pilot.travel(5, true);
-				while (pilot.isMoving()){
+				while (pilot.isMoving()){ // One of the anti backtrack methods, self explanatory
 					if (bump.isPressed()){
 						pilot.stop();
 						pilot.travel(-3);
@@ -70,7 +70,7 @@ public class Maze {
 		}
 	}
 	
-	public static void detectPastDirection(){
+	public static void detectPastDirection(){ // Uses the rotate values to determine the general direction of the past move
 		if((rotateValue >= 4) && (rotateValue <= 9)){
 			pastDirection = 1; //Right
 		}
@@ -85,7 +85,7 @@ public class Maze {
 		}
 	}
 	
-	public static void detectNewDirection(){
+	public static void detectNewDirection(){// Uses the rotate values to determine the general direction of the new move
 		if((rotateValue >= 4) && (rotateValue <= 9)){
 			newDirection = 1; //Right
 		}
@@ -101,7 +101,7 @@ public class Maze {
 		
 	}
 	
-	public static boolean detectBackTrack(){
+	public static boolean detectBackTrack(){ // Method for detecing backtracking, self explanatory
 		if((newDirection == 1) && (pastDirection == 2)){
 			return true;
 		}
@@ -111,12 +111,12 @@ public class Maze {
 		return false;
 	}
 
-	public static void selfRight() {
-		pilot.rotate(selfRightValue);
+	public static void selfRight() { // Uses the stored selfRightValue(opposite of chosen direction) to 
+		pilot.rotate(selfRightValue); // self right the robot to its original direction after bumping
 	}
 
-	public static void direction() {
-		if (rotateValue == 0) {
+	public static void direction() { // Works out the direction based on the rotateValue chosen by getLargest Value
+		if (rotateValue == 0) {  // Also stores the selfRightValue
 			pilot.rotate(10);
 			selfRightValue = -10;
 		}
@@ -198,7 +198,7 @@ public class Maze {
 		}
 	}
 
-	public static void scanArea() {
+	public static void scanArea() { // Main method for scanning the area and storing information in the array
 		Motor.A.rotate(10);
 		scan();
 		Motor.A.rotate(10);
@@ -243,13 +243,13 @@ public class Maze {
 		scan();
 	}
 
-	public static void scan() {
-		scanArray[scanCount] = sonar.getDistance();
+	public static void scan() { // Scans at sonar current position and stores it in the array, uses scanCount to 
+		scanArray[scanCount] = sonar.getDistance(); // keep track of position in the array
 		System.out.println(sonar.getDistance());
 		scanCount++;
 	}
 
-	public static void getLargestScan() {
+	public static void getLargestScan() { // Chooses the largest scan value and then sets the appropriate rotateValue
 		largestScan = 0;
 		for (int i = 0; i < 21; i++) {
 			if (scanArray[i] > largestScan) {
@@ -260,7 +260,7 @@ public class Maze {
 		Delay.msDelay(1000);
 	}
 
-	public static void scanReset() {
+	public static void scanReset() { // Resets the scanArray to 0 values and resets scanCount to 0 ready for next move
 		for (int i = 0; i < 21; i++) {
 			scanArray[i] = 0;
 		}
